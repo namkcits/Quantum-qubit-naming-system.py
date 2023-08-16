@@ -45,8 +45,7 @@ def create_entangled_qubits(num_qubits):
 # Rest of the functions...
 
 if __name__ == "__main__":
-    qc_chain = QCChain()
-
+    qc_chain = qc_chain()
     backend = Aer.get_backend('qasm_simulator')  # You can choose the backend here
 
     while True:
