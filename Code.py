@@ -1,22 +1,51 @@
 from qiskit import QuantumCircuit, execute, Aer
 from datetime import datetime
-import pickle
-import random
-import numpy as np
 
-NUM_QUBITS = 10
-IN_EDGE_NUM_QUBITS = 1
-used_names = set()
+NUM_QUBITS = 10  # Number of qubits for quantum communication
+IN_EDGE_NUM_QUBITS = 1  # Number of qubits in the in-edge circuit (modify as needed)
+used_names = set()  # To keep track of used owner names
 
 class QCChain:
     def __init__(self):
         self.qubit_id_counter = -1
         self.user_qubits = {}
 
-    # ... (other methods)
+    def mine_qubit(self, qubit_state, wallet_address):
+        qubit_id = self.qubit_id_counter + 1
+        circuit = QuantumCircuit(1)
+        circuit.h(0)
+        circuit.measure_all()
+
+        backend = Aer.get_backend('qasm_simulator')
+        job = execute(circuit, backend, shots=1)
+        result = job.result()
+        counts = result.get_counts(circuit)
+        qubit_state = list(counts.keys())[0]
+
+        if wallet_address not in self.user_qubits:
+            self.user_qubits[wallet_address] = []
+
+        mined_qubit = {
+            'qubit_id': qubit_id,
+            'qubit_state': qubit_state,
+            'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        }
+        self.user_qubits[wallet_address].append(mined_qubit)
+
+        self.qubit_id_counter += 1
+
+        return qubit_id, qubit_state
+
+def create_entangled_qubits(num_qubits):
+    circuit = QuantumCircuit(num_qubits, num_qubits)
+    for i in range(1, num_qubits):
+        circuit.cx(0, i)
+    return circuit
+
+# Rest of the functions...
 
 if __name__ == "__main__":
-    my_qc_chain = QCChain()  # Changed the variable name to my_qc_chain
+    qc_chain = QCChain()
 
     backend = Aer.get_backend('qasm_simulator')  # You can choose the backend here
 
@@ -24,56 +53,23 @@ if __name__ == "__main__":
         owner_name = "nam-kcits"
         if owner_name not in used_names:
             used_names.add(owner_name)
+            print(f"Owner name '{owner_name}' is now used.")
             break
 
+    print("Creating entangled circuit...")
     entangled_circuit = create_entangled_qubits(NUM_QUBITS)
+    print("Entangled circuit created.")
+    
+    print("Creating in-edge circuit...")
     in_edge_circuit = QuantumCircuit(IN_EDGE_NUM_QUBITS)
+    print("In-edge circuit created.")
+
     qubit_index_to_compose = 0
 
+    print("Composing circuits...")
     combined_circuit = entangled_circuit.compose(in_edge_circuit, qubits=[qubit_index_to_compose], inplace=False)
-
-    # Apply the hxxh operation
-    hxxh_operation(combined_circuit, qubit_index_to_compose)
-
-    # Perform BB84 protocol
-    bb84_sender_qubit = qubit_index_to_compose
-    bb84_receiver_qubit = qubit_index_to_compose + 1
-    bb84_protocol(combined_circuit, bb84_sender_qubit, bb84_receiver_qubit)
-
-    # Perform teleportation
-    teleport_sender_qubit = qubit_index_to_compose + 2
-    teleport_receiver_qubit = qubit_index_to_compose + 3
-    teleport_ancilla_qubit = qubit_index_to_compose + 4
-    teleportation(combined_circuit, teleport_sender_qubit, teleport_receiver_qubit, teleport_ancilla_qubit)
-
-    # Mine a qubit
-    mined_qubit_id, mined_qubit_state = my_qc_chain.mine_qubit(owner_name)  # Changed the variable name to my_qc_chain
+    print("Circuits composed.")
 
     # Rest of the modifications and optimizations...
 
-    # Generate a dynamic file path based on date and time
-    current_datetime = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-    file_path = f'secure_data_{current_datetime}.pkl'
-
-    data_to_save = {
-        'user_qubits': my_qc_chain.user_qubits,  # Changed the variable name to my_qc_chain
-        'used_names': used_names
-    }
-
-    with open(file_path, 'wb') as file:
-        pickle.dump(data_to_save, file)
-
-    print(f"Data saved to '{file_path}'")
-
-    # Load and process the data (if needed)
-    loaded_file_path = file_path  # Use the previously generated file path
-    with open(loaded_file_path, 'rb') as file:
-        loaded_data = pickle.load(file)
-
-    loaded_user_qubits = loaded_data['user_qubits']
-    loaded_used_names = loaded_data['used_names']
-
-    print("Loaded user qubits:", loaded_user_qubits)
-    print("Loaded used names:", loaded_used_names)
-
-# Use the loaded data as needed
+    # ... (rest of the code)
