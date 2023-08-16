@@ -58,4 +58,12 @@ This project is licensed under the [MIT License](LICENSE).
 
 ```
 
-Please note that this is just a template, and you should customize it to match the specifics of your project and provide accurate information.
+"This project involves creating quantum circuits to generate qubits and associating them with names. When you run the code, it utilizes memory within the program's runtime to manage data. Specifically, the `used_names` set is employed to keep track of names that have been used. This data is stored within the program's memory while the code is running.
+
+For optimal functionality and a smoother user experience, this code is particularly well-suited for execution within the IBM Quantum Experience platform. By using IBM Quantum Experience, you can leverage their cloud-based quantum computers and simulators, which are designed to accommodate quantum tasks like the one described in the code.
+
+However, the code is not limited to IBM Quantum Experience alone. It can be adapted and executed within various integrated development environments (IDEs) of your choice that support the necessary dependencies. If you choose to run it outside of IBM Quantum Experience, you may need to configure the code to interact with different quantum backends or simulators.
+
+Moreover, the project is evolving to include database integration. This enhancement aims to streamline the process by making it easier to track the progress of the project and more specifically record the usage and storage of names associated with qubits. This database integration will provide a centralized and organized way to view the project's history and milestones.
+
+In summary, while running the code within IBM Quantum Experience offers an optimized experience, the project's potential extends to other development environments as well. The code indeed stores memory during runtime, utilizing the `used_names` set to track used names, which reflects an essential aspect of personalizing and securing quantum resources."
