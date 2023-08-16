@@ -6,6 +6,7 @@ IN_EDGE_NUM_QUBITS = 1  # Number of qubits in the in-edge circuit (modify as nee
 used_names = set()  # To keep track of used owner names
 
 class QCChain:
+    
     def __init__(self):
         self.qubit_id_counter = -1
         self.user_qubits = {}
@@ -19,6 +20,9 @@ class QCChain:
         backend = Aer.get_backend('qasm_simulator')
         job = execute(circuit, backend, shots=1)
         result = job.result()
+
+       
+       
         counts = result.get_counts(circuit)
         qubit_state = list(counts.keys())[0]
 
